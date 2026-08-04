@@ -1,25 +1,49 @@
+import { Box } from "@mui/material";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import { Box } from "@mui/material";
+
+const drawerWidth = 260;
+const navbarHeight = 90;
 
 function Layout({ children }) {
   return (
-    <>
-      <Navbar />
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        bgcolor: "#F5F7FB",
+      }}
+    >
+      {/* Sidebar */}
       <Sidebar />
 
+      {/* Main Content */}
       <Box
         sx={{
-          ml: "240px",
-          mt: "64px",
-          p: 4,
-          minHeight: "100vh",
-          backgroundColor: "#f5f7fb",
+          flexGrow: 1,
+          ml: `${drawerWidth}px`,
+          width: `calc(100% - ${drawerWidth}px)`,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {children}
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Page Content */}
+        <Box
+          sx={{
+            mt: `${navbarHeight}px`,
+            px: { xs: 3, md: 5 },
+            py: 4,
+            width: "100%",
+            overflowX: "hidden",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
-    </>
+    </Box>
   );
 }
 

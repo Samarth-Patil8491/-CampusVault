@@ -1,60 +1,63 @@
 import {
   Drawer,
+  Box,
+  Typography,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar,
-  Typography,
-  Box,
+  Avatar,
+  Divider,
 } from "@mui/material";
 
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import FolderIcon from "@mui/icons-material/Folder";
-import PersonIcon from "@mui/icons-material/Person";
-import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
+import MenuBookRoundedIcon from "@mui/icons-material/MenuBookRounded";
+import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const menuItems = [
   {
-    text: "Dashboard",
-    icon: <DashboardIcon />,
+    title: "Dashboard",
+    icon: <DashboardRoundedIcon />,
     path: "/dashboard",
   },
   {
-    text: "Upload Notes",
-    icon: <CloudUploadIcon />,
+    title: "Upload Notes",
+    icon: <CloudUploadRoundedIcon />,
     path: "/upload",
   },
   {
-    text: "Browse Notes",
-    icon: <MenuBookIcon />,
+    title: "Browse Notes",
+    icon: <MenuBookRoundedIcon />,
     path: "/notes",
   },
   {
-    text: "My Uploads",
-    icon: <FolderIcon />,
-    path: "/myuploads",
+    title: "My Uploads",
+    icon: <FolderRoundedIcon />,
+    path: "/my-uploads",
   },
   {
-    text: "Profile",
-    icon: <PersonIcon />,
+    title: "Profile",
+    icon: <PersonRoundedIcon />,
     path: "/profile",
-  },
-  {
-    text: "Logout",
-    icon: <LogoutIcon />,
-    path: "/",
   },
 ];
 
 function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/", { replace: true });
+  };
 
   return (
     <Drawer
@@ -62,70 +65,163 @@ function Sidebar() {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
+
         "& .MuiDrawer-paper": {
           width: drawerWidth,
           boxSizing: "border-box",
           borderRight: "1px solid #E5E7EB",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#FFFFFF",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
-      <Toolbar />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          p: 3,
+        }}
+      >
+        {/* Logo */}
 
-      <Box sx={{ p: 3 }}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          color="#2563EB"
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            mb: 5,
+          }}
         >
-          CampusVault
-        </Typography>
-
-        <Typography
-          variant="body2"
-          color="gray"
-        >
-          Notes Portal
-        </Typography>
-      </Box>
-
-      <List sx={{ px: 2 }}>
-
-        {menuItems.map((item) => (
-
-          <ListItemButton
-            key={item.text}
-            component={Link}
-            to={item.path}
-            selected={location.pathname === item.path}
+          <Avatar
             sx={{
-              mb: 1,
-              borderRadius: 3,
-
-              "&.Mui-selected": {
-                backgroundColor: "#2563EB",
-                color: "white",
-              },
-
-              "&.Mui-selected .MuiListItemIcon-root": {
-                color: "white",
-              },
-
-              "&:hover": {
-                backgroundColor: "#EAF2FF",
-              },
+              bgcolor: "#2563EB",
+              width: 58,
+              height: 58,
             }}
           >
+            <SchoolRoundedIcon />
+          </Avatar>
 
-            <ListItemIcon>{item.icon}</ListItemIcon>
+          <Box>
+            <Typography fontWeight={700} fontSize={24}>
+              CampusVault
+            </Typography>
 
-            <ListItemText primary={item.text} />
+            <Typography color="text.secondary" fontSize={14}>
+              Student Portal
+            </Typography>
+          </Box>
+        </Box>
 
-          </ListItemButton>
+        {/* Menu */}
 
-        ))}
+        <List sx={{ p: 0 }}>
+          {menuItems.map((item) => {
+            const active = location.pathname === item.path;
 
-      </List>
+            return (
+              <ListItemButton
+                key={item.title}
+                component={Link}
+                to={item.path}
+                sx={{
+                  mb: 1.2,
+                  py: 1.5,
+                  borderRadius: 4,
+
+                  bgcolor: active ? "#2563EB" : "transparent",
+
+                  color: active ? "#FFFFFF" : "#374151",
+
+                  "&:hover": {
+                    bgcolor: active ? "#1D4ED8" : "#EFF6FF",
+                  },
+
+                  transition: ".25s",
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 42,
+                    color: active ? "#FFFFFF" : "#2563EB",
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+
+                <ListItemText
+                  primary={item.title}
+                  primaryTypographyProps={{
+                    fontWeight: active ? 700 : 500,
+                    fontSize: 15,
+                  }}
+                />
+              </ListItemButton>
+            );
+          })}
+        </List>
+
+        {/* Push bottom section */}
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* User */}
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Avatar
+            sx={{
+              bgcolor: "#2563EB",
+              width: 50,
+              height: 50,
+            }}
+          >
+            S
+          </Avatar>
+
+          <Box>
+            <Typography fontWeight={700}>
+              Sam
+            </Typography>
+
+            <Typography
+              fontSize={13}
+              color="text.secondary"
+            >
+              Student
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Logout */}
+
+        <ListItemButton
+          onClick={handleLogout}
+          sx={{
+            borderRadius: 3,
+
+            "&:hover": {
+              bgcolor: "#F3F4F6",
+            },
+          }}
+        >
+          <ListItemIcon>
+            <LogoutRoundedIcon />
+          </ListItemIcon>
+
+          <ListItemText primary="Logout" />
+        </ListItemButton>
+      </Box>
     </Drawer>
   );
 }

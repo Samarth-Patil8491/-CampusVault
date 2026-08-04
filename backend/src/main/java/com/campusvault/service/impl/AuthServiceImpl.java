@@ -26,11 +26,27 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            return new AuthResponse("Email already exists", null);
+            return new AuthResponse(
+        "Email already exists",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+);
         }
 
         if (userRepository.existsByUsn(request.getUsn())) {
-            return new AuthResponse("USN already exists", null);
+            return new AuthResponse(
+        "USN already exists",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+);
         }
 
         User user = User.builder()
@@ -49,7 +65,15 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtUtil.generateToken(user.getEmail());
 
-        return new AuthResponse("User Registered Successfully", token);
+        return new AuthResponse(
+        "User Registered Successfully",
+        token,
+        user.getEmail(),
+        user.getFullName(),
+        user.getRole(),
+        user.getDepartment(),
+        user.getSemester()
+);
     }
 
     @Override
@@ -60,15 +84,39 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("User Found: " + user);
 
         if (user == null) {
-            return new AuthResponse("Invalid Email", null);
+            return new AuthResponse(
+        "Invalid Email",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return new AuthResponse("Invalid Password", null);
+           return new AuthResponse(
+        "Invalid Password",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+);
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
 
-        return new AuthResponse("Login Successful", token);
+        return new AuthResponse(
+        "Login Successful",
+        token,
+        user.getEmail(),
+        user.getFullName(),
+        user.getRole(),
+        user.getDepartment(),
+        user.getSemester()
+);
     }
 }

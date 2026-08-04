@@ -17,11 +17,17 @@ public class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
     private final FileStorageService fileStorageService;
 
-    public NoteServiceImpl(NoteRepository noteRepository,
-                           FileStorageService fileStorageService) {
+    public NoteServiceImpl(
+            NoteRepository noteRepository,
+            FileStorageService fileStorageService) {
+
         this.noteRepository = noteRepository;
         this.fileStorageService = fileStorageService;
     }
+
+    // ==========================
+    // Upload Note
+    // ==========================
 
     @Override
     public NoteResponse uploadNote(
@@ -33,6 +39,7 @@ public class NoteServiceImpl implements NoteService {
             MultipartFile file) throws Exception {
 
         String fileName = fileStorageService.storeFile(file);
+
         Note note = Note.builder()
                 .title(title)
                 .subject(subject)
@@ -47,16 +54,38 @@ public class NoteServiceImpl implements NoteService {
         return new NoteResponse("Note Uploaded Successfully");
     }
 
+    // ==========================
+    // Get All Notes
+    // ==========================
+
     @Override
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
 
+    // ==========================
+    // Get Notes Uploaded By User
+    // ==========================
+
     @Override
-    public List<Note> searchNotes(String department, Integer semester, String subject) {
+    public List<Note> getNotesByUploader(String email) {
+        return noteRepository.findByUploadedBy(email);
+    }
+
+    // ==========================
+    // Search Notes
+    // ==========================
+
+    @Override
+    public List<Note> searchNotes(
+            String department,
+            Integer semester,
+            String subject) {
 
         if (department != null && semester != null) {
-            return noteRepository.findByDepartmentAndSemester(department, semester);
+            return noteRepository.findByDepartmentAndSemester(
+                    department,
+                    semester);
         }
 
         if (department != null) {
@@ -73,4 +102,37 @@ public class NoteServiceImpl implements NoteService {
 
         return noteRepository.findAll();
     }
+
+    // ==========================
+    // Update Note
+    // ==========================
+
+    @Override
+    public Note updateNote(Long id, Note updatedNote) {
+
+        Note note = noteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Note Not Found"));
+
+        note.setTitle(updatedNote.getTitle());
+        note.setSubject(updatedNote.getSubject());
+        note.setDepartment(updatedNote.getDepartment());
+        note.setSemester(updatedNote.getSemester());
+
+        return noteRepository.save(note);
+    }
+
+    // ==========================
+    // Delete Note
+    // ==========================
+
+    @Override
+    public void deleteNote(Long id) {
+
+        if (!noteRepository.existsById(id)) {
+            throw new RuntimeException("Note Not Found");
+        }
+
+        noteRepository.deleteById(id);
+    }
+
 }

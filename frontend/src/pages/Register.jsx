@@ -1,143 +1,325 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { register } from "../services/AuthService";
+
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+} from "@mui/material";
+
+import SchoolIcon from "@mui/icons-material/School";
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
+import BadgeIcon from "@mui/icons-material/Badge";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../styles/Login.css";
 
 function Register() {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        fullName: "",
-        usn: "",
-        email: "",
-        password: "",
-        university: "",
-        department: "",
-        semester: "",
-        section: "",
-        role: "STUDENT"
+  const [formData, setFormData] = useState({
+    fullName: "",
+    usn: "",
+    email: "",
+    password: "",
+    university: "",
+    department: "",
+    semester: "",
+    section: "",
+    role: "STUDENT",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+  const handleSubmit = async (e) => {
 
-    const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
+    try {
 
-        try {
+      const response = await register(formData);
 
-            const response = await register(formData);
+      toast.success(response.data.message);
 
-            toast.success(response.data.message);
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
 
-            setTimeout(() => {
-                navigate("/");
-            }, 1500);
+    } catch (error) {
 
-        } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Registration Failed"
+      );
 
-            toast.error(
-                error.response?.data?.message || "Registration Failed"
-            );
-        }
-    };
+    }
 
-    return (
+  };
 
-        <div className="login-container">
+  return (
 
-            <ToastContainer />
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background:
+          "linear-gradient(135deg,#2563EB,#4F8EF7)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        p: 3,
+      }}
+    >
 
-            <div className="login-box">
+      <ToastContainer />
 
-                <h1>CampusVault</h1>
+      <Paper
+        elevation={12}
+        sx={{
+          width: "100%",
+          maxWidth: 1250,
+          display: "flex",
+          overflow: "hidden",
+          borderRadius: 6,
+        }}
+      >
 
-                <h3>Register</h3>
+        {/* LEFT */}
 
-                <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            flex: 1,
+            background:
+              "linear-gradient(135deg,#2563EB,#4F8EF7)",
+            color: "white",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            p: 8,
+          }}
+        >
 
-                    <input
-                        name="fullName"
-                        placeholder="Full Name"
-                        onChange={handleChange}
-                        required
-                    />
+          <SchoolIcon sx={{ fontSize: 80 }} />
 
-                    <input
-                        name="usn"
-                        placeholder="USN"
-                        onChange={handleChange}
-                        required
-                    />
+          <Typography
+            variant="h2"
+            fontWeight="bold"
+            mt={4}
+          >
+            CampusVault
+          </Typography>
 
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                        required
-                    />
+          <Typography
+            mt={4}
+            fontSize={22}
+            sx={{ opacity: .9 }}
+          >
+            Join thousands of students sharing
+            quality study materials with CampusVault.
+          </Typography>
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        onChange={handleChange}
-                        required
-                    />
+        </Box>
 
-                    <input
-                        name="university"
-                        placeholder="University"
-                        onChange={handleChange}
-                        required
-                    />
+        {/* RIGHT */}
 
-                    <input
-                        name="department"
-                        placeholder="Department"
-                        onChange={handleChange}
-                        required
-                    />
+        <Box
+          sx={{
+            flex: 1,
+            p: 6,
+            background: "#fff",
+          }}
+        >
 
-                    <input
-                        type="number"
-                        name="semester"
-                        placeholder="Semester"
-                        onChange={handleChange}
-                        required
-                    />
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            mb={1}
+          >
+            Create Account
+          </Typography>
 
-                    <input
-                        name="section"
-                        placeholder="Section"
-                        onChange={handleChange}
-                        required
-                    />
+          <Typography
+            color="text.secondary"
+            mb={4}
+          >
+            Register to continue
+          </Typography>
 
-                    <button type="submit">
-                        Register
-                    </button>
+          <form onSubmit={handleSubmit}>
 
-                </form>
+            <Grid container spacing={2}>
 
-                <p>
-                    Already have an account?
-                    <Link to="/"> Login</Link>
-                </p>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Full Name"
+                  name="fullName"
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PersonIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-            </div>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="USN"
+                  name="usn"
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-        </div>
-    );
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type="password"
+                  label="Password"
+                  name="password"
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="University"
+                  name="university"
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Department"
+                  name="department"
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ApartmentIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={6} md={3}>
+                <TextField
+                  fullWidth
+                  select
+                  label="Semester"
+                  name="semester"
+                  onChange={handleChange}
+                >
+                  {[1,2,3,4,5,6,7,8].map((sem)=>(
+                    <MenuItem key={sem} value={sem}>
+                      {sem}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
+              <Grid item xs={6} md={3}>
+                <TextField
+                  fullWidth
+                  label="Section"
+                  name="section"
+                  onChange={handleChange}
+                />
+              </Grid>
+
+            </Grid>
+
+            <Button
+              fullWidth
+              variant="contained"
+              type="submit"
+              sx={{
+                mt:4,
+                py:1.6,
+                borderRadius:10,
+                fontSize:18,
+              }}
+            >
+              Create Account
+            </Button>
+
+          </form>
+
+          <Typography
+            mt={3}
+            textAlign="center"
+          >
+            Already have an account?{" "}
+            <Link
+              to="/"
+              style={{
+                color:"#2563EB",
+                fontWeight:600,
+                textDecoration:"none",
+              }}
+            >
+              Login
+            </Link>
+          </Typography>
+
+        </Box>
+
+      </Paper>
+
+    </Box>
+
+  );
+
 }
 
 export default Register;

@@ -3,69 +3,127 @@ import {
   Toolbar,
   Typography,
   Box,
-  TextField,
-  Avatar,
   IconButton,
+  Avatar,
+  InputBase,
+  Badge,
+  Paper,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+
+const drawerWidth = 260;
 
 function Navbar() {
   return (
     <AppBar
-      position="fixed"
-      elevation={1}
-      sx={{
-        bgcolor: "white",
-        color: "#111827",
-      }}
-    >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          color="#2563EB"
-        >
-          CampusVault
-        </Typography>
+  position="fixed"
+  elevation={0}
+  sx={{
+    left: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    bgcolor: "#fff",
+    color: "#111827",
+    borderBottom: "1px solid #E5E7EB",
+    boxShadow: "none",
+    zIndex: 1200,
+  }}
+>
+      <Toolbar
+        sx={{
+          height: 90,
+          px: 4,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {/* Left */}
+
+        <Box>
+          <Typography
+            variant="h3"
+            fontWeight={700}
+          >
+            Dashboard
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            fontSize={22}
+          >
+            Welcome back 👋
+          </Typography>
+        </Box>
+
+        {/* Right */}
 
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 3,
+            gap: 2,
           }}
         >
-          <Box sx={{ position: "relative" }}>
-            <SearchIcon
-              sx={{
-                position: "absolute",
-                left: 12,
-                top: 12,
-                color: "gray",
-              }}
-            />
+          <Paper
+            elevation={0}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: 360,
+              px: 2,
+              py: 0.7,
+              borderRadius: 10,
+              border: "1px solid #E5E7EB",
+            }}
+          >
+            <SearchIcon color="disabled" />
 
-            <TextField
-              size="small"
-              placeholder="Search notes..."
+            <InputBase
+              placeholder="Search..."
               sx={{
-                width: 320,
-                "& input": {
-                  pl: 4,
-                },
+                ml: 1,
+                flex: 1,
               }}
             />
-          </Box>
+          </Paper>
 
           <IconButton>
-            <NotificationsNoneIcon />
+            <Badge
+              badgeContent={3}
+              color="error"
+            >
+              <NotificationsNoneIcon />
+            </Badge>
           </IconButton>
 
-          <Avatar sx={{ bgcolor: "#2563EB" }}>
+          <Avatar
+            sx={{
+              bgcolor: "#2563EB",
+              width: 48,
+              height: 48,
+            }}
+          >
             S
           </Avatar>
+
+          <Box>
+            <Typography fontWeight={700}>
+              Sam
+            </Typography>
+
+            <Typography
+              color="text.secondary"
+              fontSize={14}
+            >
+              Student
+            </Typography>
+          </Box>
+
+          <KeyboardArrowDownRoundedIcon />
         </Box>
       </Toolbar>
     </AppBar>

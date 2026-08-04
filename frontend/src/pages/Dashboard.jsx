@@ -1,177 +1,110 @@
-import { useEffect, useState } from "react";
+import { Grid } from "@mui/material";
 
 import Layout from "../components/Layout";
 import HeroBanner from "../components/HeroBanner";
+import ProfileCard from "../components/ProfileCard";
 import StatsCard from "../components/StatsCard";
+import RecentUploads from "../components/RecentUploads";
+import TrendingNotes from "../components/TrendingNotes";
+import PopularSubjects from "../components/PopularSubjects";
+import RecentActivity from "../components/RecentActivity";
+import QuickActions from "../components/QuickActions";
 
-import {
-  Grid,
-  Paper,
-  Typography,
-  List,
-  ListItem,
-  Divider,
-} from "@mui/material";
-
-import DescriptionIcon from "@mui/icons-material/Description";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import DownloadIcon from "@mui/icons-material/Download";
-
-import { getAllNotes } from "../services/noteService";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
 
 function Dashboard() {
-
-  const [notes, setNotes] = useState([]);
-
-  useEffect(() => {
-    loadNotes();
-  }, []);
-
-  const loadNotes = async () => {
-
-    try {
-
-      const response = await getAllNotes();
-
-      setNotes(response.data);
-
-    } catch (err) {
-
-      console.log(err);
-
-    }
-
-  };
-
-  const totalNotes = notes.length;
-
-  const departments = new Set(
-    notes.map((note) => note.department)
-  ).size;
-
   return (
-
     <Layout>
+      <Grid
+        container
+        spacing={3}
+        alignItems="stretch"
+      >
+        {/* ================= Hero ================= */}
 
-      <HeroBanner />
+        <Grid item xs={12} lg={9}>
+          <HeroBanner />
+        </Grid>
 
-      <Grid container spacing={3}>
+        {/* ================= Profile ================= */}
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} lg={3}>
+          <ProfileCard />
+        </Grid>
+
+        {/* ================= Statistics ================= */}
+
+        <Grid item xs={12} sm={6} lg={3}>
           <StatsCard
             title="Total Notes"
-            value={totalNotes}
+            value="248"
             color="#2563EB"
-            icon={<DescriptionIcon />}
+            icon={<DescriptionRoundedIcon />}
           />
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatsCard
-            title="My Uploads"
-            value={totalNotes}
-            color="#16A34A"
-            icon={<UploadFileIcon />}
+            title="Uploads"
+            value="32"
+            color="#10B981"
+            icon={<CloudUploadRoundedIcon />}
           />
         </Grid>
 
-        <Grid item xs={12} md={3}>
-          <StatsCard
-            title="Departments"
-            value={departments}
-            color="#F97316"
-            icon={<ApartmentIcon />}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatsCard
             title="Downloads"
-            value="0"
-            color="#7C3AED"
-            icon={<DownloadIcon />}
+            value="1.2K"
+            color="#F59E0B"
+            icon={<DownloadRoundedIcon />}
           />
         </Grid>
 
-      </Grid>
-
-      <Grid container spacing={3} sx={{ mt: 2 }}>
-
-        <Grid item xs={12} md={6}>
-
-          <Paper sx={{ p: 3, borderRadius: 4 }}>
-
-            <Typography variant="h6" fontWeight="bold">
-
-              Recent Uploads
-
-            </Typography>
-
-            <List>
-
-              {notes.slice(0,5).map((note)=>(
-
-                <div key={note.id}>
-
-                  <ListItem>
-
-                    {note.title}
-
-                  </ListItem>
-
-                  <Divider/>
-
-                </div>
-
-              ))}
-
-            </List>
-
-          </Paper>
-
+        <Grid item xs={12} sm={6} lg={3}>
+          <StatsCard
+            title="Bookmarks"
+            value="56"
+            color="#EC4899"
+            icon={<BookmarkRoundedIcon />}
+          />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        {/* ================= Recent Uploads ================= */}
 
-          <Paper sx={{ p: 3, borderRadius: 4 }}>
-
-            <Typography variant="h6" fontWeight="bold">
-
-              Latest Subjects
-
-            </Typography>
-
-            <List>
-
-              {notes.slice(0,5).map((note)=>(
-
-                <div key={note.id}>
-
-                  <ListItem>
-
-                    {note.subject}
-
-                  </ListItem>
-
-                  <Divider/>
-
-                </div>
-
-              ))}
-
-            </List>
-
-          </Paper>
-
+        <Grid item xs={12} lg={8}>
+          <RecentUploads />
         </Grid>
 
-      </Grid>
+        {/* ================= Trending Notes ================= */}
 
+        <Grid item xs={12} lg={4}>
+          <TrendingNotes />
+        </Grid>
+
+        {/* ================= Popular Subjects ================= */}
+
+        <Grid item xs={12} lg={6}>
+          <PopularSubjects />
+        </Grid>
+
+        {/* ================= Recent Activity ================= */}
+
+        <Grid item xs={12} lg={6}>
+          <RecentActivity />
+        </Grid>
+
+        {/* ================= Quick Actions ================= */}
+
+        <Grid item xs={12}>
+          <QuickActions />
+        </Grid>
+      </Grid>
     </Layout>
-
   );
-
 }
 
 export default Dashboard;

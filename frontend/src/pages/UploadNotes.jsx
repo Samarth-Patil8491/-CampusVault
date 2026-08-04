@@ -1,121 +1,258 @@
 import { useState } from "react";
-import { uploadNote } from "../services/NoteService";
-import { ToastContainer, toast } from "react-toastify";
+import Layout from "../components/Layout";
+import { uploadNote } from "../services/noteService";
+
+import {
+  Box,
+  Button,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
+import PictureAsPdfRoundedIcon from "@mui/icons-material/PictureAsPdfRounded";
+
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../styles/Upload.css";
 
 function UploadNotes() {
 
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
+    title: "",
+    subject: "",
+    department: "",
+    semester: "",
+    uploadedBy: "",
+  });
+
+  const [file, setFile] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    const data = new FormData();
+
+    Object.keys(formData).forEach((key) => {
+      data.append(key, formData[key]);
+    });
+
+    data.append("file", file);
+
+    try {
+
+      const res = await uploadNote(data);
+
+      toast.success(res.data.message);
+
+      setFormData({
         title: "",
         subject: "",
         department: "",
         semester: "",
-        uploadedBy: ""
-    });
+        uploadedBy: "",
+      });
 
-    const [file, setFile] = useState(null);
+      setFile(null);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+    } catch {
 
-    const handleSubmit = async (e) => {
+      toast.error("Upload Failed");
 
-        e.preventDefault();
+    }
 
-        const data = new FormData();
+  };
 
-        data.append("title", formData.title);
-        data.append("subject", formData.subject);
-        data.append("department", formData.department);
-        data.append("semester", formData.semester);
-        data.append("uploadedBy", formData.uploadedBy);
-        data.append("file", file);
+  return (
 
-        try {
+    <Layout>
 
-            const response = await uploadNote(data);
+      <ToastContainer />
 
-            toast.success(response.data.message);
+      <Typography
+        variant="h4"
+        fontWeight={700}
+        mb={1}
+      >
+        Upload Notes
+      </Typography>
 
-        } catch (error) {
+      <Typography
+        color="text.secondary"
+        mb={4}
+      >
+        Share your study materials with other students.
+      </Typography>
 
-            toast.error("Upload Failed");
+      <Paper
+        elevation={0}
+        sx={{
+          p: 5,
+          borderRadius: 5,
+          border: "1px solid #E5E7EB",
+        }}
+      >
 
-        }
+        <form onSubmit={handleSubmit}>
 
-    };
+          <Paper
+            component="label"
+            elevation={0}
+            sx={{
+              border: "2px dashed #2563EB",
+              borderRadius: 4,
+              p: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              cursor: "pointer",
+              background: "#F8FAFF",
+              mb: 4,
 
-    return (
+              "&:hover": {
+                background: "#EEF4FF",
+              },
+            }}
+          >
 
-        <div className="upload-container">
+            <input
+              hidden
+              type="file"
+              accept=".pdf"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
 
-            <ToastContainer />
+            {file ? (
+              <>
+                <PictureAsPdfRoundedIcon
+                  color="error"
+                  sx={{ fontSize: 70 }}
+                />
 
-            <div className="upload-box">
+                <Typography
+                  mt={2}
+                  fontWeight={600}
+                >
+                  {file.name}
+                </Typography>
+              </>
+            ) : (
+              <>
+                <CloudUploadRoundedIcon
+                  sx={{
+                    fontSize: 70,
+                    color: "#2563EB",
+                  }}
+                />
 
-                <h2>Upload Notes</h2>
+                <Typography
+                  mt={2}
+                  fontWeight={700}
+                >
+                  Drag & Drop PDF
+                </Typography>
 
-                <form onSubmit={handleSubmit}>
+                <Typography color="text.secondary">
+                  or click to browse
+                </Typography>
+              </>
+            )}
 
-                    <input
-                        name="title"
-                        placeholder="Title"
-                        onChange={handleChange}
-                        required
-                    />
+          </Paper>
 
-                    <input
-                        name="subject"
-                        placeholder="Subject"
-                        onChange={handleChange}
-                        required
-                    />
+          <Grid container spacing={3}>
 
-                    <input
-                        name="department"
-                        placeholder="Department"
-                        onChange={handleChange}
-                        required
-                    />
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+              />
+            </Grid>
 
-                    <input
-                        type="number"
-                        name="semester"
-                        placeholder="Semester"
-                        onChange={handleChange}
-                        required
-                    />
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+              />
+            </Grid>
 
-                    <input
-                        type="email"
-                        name="uploadedBy"
-                        placeholder="Uploaded By"
-                        onChange={handleChange}
-                        required
-                    />
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Department"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+              />
+            </Grid>
 
-                    <input
-                        type="file"
-                        accept=".pdf"
-                        onChange={(e) => setFile(e.target.files[0])}
-                        required
-                    />
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Semester"
+                name="semester"
+                value={formData.semester}
+                onChange={handleChange}
+              />
+            </Grid>
 
-                    <button type="submit">
-                        Upload
-                    </button>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Uploaded By"
+                name="uploadedBy"
+                value={formData.uploadedBy}
+                onChange={handleChange}
+              />
+            </Grid>
 
-                </form>
+          </Grid>
 
-            </div>
+          <Box
+            textAlign="right"
+            mt={4}
+          >
 
-        </div>
-    );
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{
+                borderRadius: 3,
+                px: 5,
+                py: 1.5,
+                textTransform: "none",
+                fontWeight: 700,
+              }}
+            >
+              Upload Notes
+            </Button>
+
+          </Box>
+
+        </form>
+
+      </Paper>
+
+    </Layout>
+
+  );
+
 }
 
 export default UploadNotes;

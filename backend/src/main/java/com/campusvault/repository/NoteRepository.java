@@ -14,4 +14,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findBySubject(String subject);
 
     List<Note> findByDepartmentAndSemester(String department, Integer semester);
+
+List<Note> findByUploadedBy(String uploadedBy);
 }
