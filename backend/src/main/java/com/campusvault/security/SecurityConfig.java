@@ -15,20 +15,28 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-   @Bean
-SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    System.out.println("===== SECURITY CONFIG LOADED =====");
+        System.out.println("===== SECURITY CONFIG LOADED =====");
 
-    http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/notes/**").permitAll()
-                    .requestMatchers("/api/files/**").permitAll()
-                    .anyRequest().authenticated())
-            .httpBasic(Customizer.withDefaults());
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
 
-    return http.build();
-}
+                        // Health endpoint for Kubernetes
+                        .requestMatchers("/actuator/health").permitAll()
+
+                        // Public APIs
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/notes/**").permitAll()
+                        .requestMatchers("/api/files/**").permitAll()
+
+                        // Everything else requires login
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults());
+
+        return http.build();
+    }
 }
