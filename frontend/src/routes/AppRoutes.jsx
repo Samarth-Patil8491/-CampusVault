@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -12,22 +12,16 @@ import Profile from "../pages/Profile";
 import EditNote from "../pages/EditNote";
 
 function AppRoutes() {
-
   return (
-
     <Routes>
 
       {/* Public Routes */}
 
-      <Route
-        path="/"
-        element={<Login />}
-      />
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
-      <Route
-        path="/register"
-        element={<Register />}
-      />
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/register" element={<Register />} />
 
       {/* Protected Routes */}
 
@@ -85,10 +79,12 @@ function AppRoutes() {
         }
       />
 
+      {/* Unknown routes */}
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
+
     </Routes>
-
   );
-
 }
 
 export default AppRoutes;

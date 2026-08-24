@@ -19,7 +19,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -27,62 +26,65 @@ function Login() {
     password: "",
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error("Please enter your email and password");
+      return;
+    }
 
     try {
       const response = await login(formData);
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem(
-    "email",
-    response.data.email
-);
+        "email",
+        response.data.email || formData.email
+      );
+      localStorage.setItem(
+        "fullName",
+        response.data.fullName || "Student"
+      );
+      localStorage.setItem(
+        "role",
+        response.data.role || "STUDENT"
+      );
+      localStorage.setItem(
+        "department",
+        response.data.department || ""
+      );
+      localStorage.setItem(
+        "semester",
+        response.data.semester || ""
+      );
 
-localStorage.setItem(
-    "fullName",
-    response.data.fullName
-);
-
-localStorage.setItem(
-    "role",
-    response.data.role
-);
-
-localStorage.setItem(
-    "department",
-    response.data.department
-);
-
-localStorage.setItem(
-    "semester",
-    response.data.semester
-);
-
-      toast.success(response.data.message);
+      toast.success(
+        response.data.message || "Login successful"
+      );
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 1000);
+      }, 700);
 
     } catch (error) {
-
       toast.error(
-        error.response?.data?.message || "Login Failed"
+        error.response?.data?.message ||
+          "Invalid email or password"
       );
-
     }
   };
 
   return (
-
     <Box
       sx={{
         minHeight: "100vh",
@@ -94,7 +96,6 @@ localStorage.setItem(
         p: 3,
       }}
     >
-
       <ToastContainer />
 
       <Paper
@@ -102,7 +103,7 @@ localStorage.setItem(
         sx={{
           width: "100%",
           maxWidth: 1150,
-          height: 700,
+          minHeight: 700,
           display: "flex",
           overflow: "hidden",
           borderRadius: 6,
@@ -123,7 +124,6 @@ localStorage.setItem(
             p: 8,
           }}
         >
-
           <SchoolIcon sx={{ fontSize: 80 }} />
 
           <Typography
@@ -137,13 +137,12 @@ localStorage.setItem(
           <Typography
             mt={4}
             fontSize={23}
-            sx={{ opacity: .9 }}
+            sx={{ opacity: 0.9 }}
           >
             Store, manage and share study
             materials with students from
             your department.
           </Typography>
-
         </Box>
 
         {/* RIGHT */}
@@ -158,7 +157,6 @@ localStorage.setItem(
             p: 6,
           }}
         >
-
           <Box
             sx={{
               width: "100%",
@@ -170,7 +168,7 @@ localStorage.setItem(
               variant="h3"
               fontWeight="bold"
             >
-              Welcome Back 👋
+              Welcome Back
             </Typography>
 
             <Typography
@@ -187,8 +185,10 @@ localStorage.setItem(
                 margin="normal"
                 label="Email"
                 name="email"
+                type="email"
                 value={formData.email}
                 onChange={handleChange}
+                autoComplete="username"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -201,11 +201,12 @@ localStorage.setItem(
               <TextField
                 fullWidth
                 margin="normal"
-                type="password"
                 label="Password"
                 name="password"
+                type="password"
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="current-password"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -224,6 +225,8 @@ localStorage.setItem(
                   py: 1.6,
                   borderRadius: 10,
                   fontSize: 18,
+                  fontWeight: 700,
+                  textTransform: "none",
                 }}
               >
                 Sign In
@@ -236,6 +239,7 @@ localStorage.setItem(
               textAlign="center"
             >
               Don't have an account?{" "}
+
               <Link
                 to="/register"
                 style={{
@@ -249,11 +253,9 @@ localStorage.setItem(
             </Typography>
 
           </Box>
-
         </Box>
 
       </Paper>
-
     </Box>
   );
 }

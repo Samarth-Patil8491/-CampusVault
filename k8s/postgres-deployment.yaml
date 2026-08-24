@@ -20,15 +20,16 @@ spec:
     spec:
       containers:
         - name: postgres
-
           image: postgres:16
+
           resources:
             requests:
               memory: "256Mi"
               cpu: "250m"
-            limits: 
+            limits:
               memory: "512Mi"
               cpu: "500m"
+
           ports:
             - containerPort: 5432
 
@@ -51,11 +52,14 @@ spec:
                   name: campusvault-secret
                   key: DB_PASSWORD
 
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
           volumeMounts:
-          - name: postgres-storage
-            mountPath: /var/lib/postgresql/data
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
 
       volumes:
-      - name: postgres-storage
-        persistentVolumeClaim:
-          claimName: postgres-pvc
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc

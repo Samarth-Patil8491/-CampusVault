@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: campusvault-backend:latest
-        imagePullPolicy: Never
+        image: 877270729772.dkr.ecr.ap-south-1.amazonaws.com/campusvault-backend:latest
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "512Mi"

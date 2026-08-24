@@ -5,29 +5,31 @@ metadata:
   name: campusvault-ingress
   namespace: campusvault
 
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
 
   rules:
-  - host: campusvault.local
+    - http:
+        paths:
 
-    http:
-      paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 8080
 
-      - path: /
-        pathType: Prefix
-
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
-
-      - path: /api
-        pathType: Prefix
-
-        backend:
-          service:
-            name: backend-service
-            port:
-              number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80

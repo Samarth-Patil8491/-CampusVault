@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   Paper,
   Typography,
@@ -12,6 +14,40 @@ import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 function ProfileCard() {
+  const navigate = useNavigate();
+
+  // Get logged-in user's information
+  const name = localStorage.getItem("fullName") || "Student";
+  const email = localStorage.getItem("email") || "";
+  const department = localStorage.getItem("department") || "";
+  const semester = localStorage.getItem("semester") || "";
+  const role = localStorage.getItem("role") || "STUDENT";
+
+  // Create initials
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0))
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
+
+  // Profile completion
+  const fields = [
+    name !== "Student" ? name : "",
+    email,
+    department,
+    semester,
+  ];
+
+  const completed = fields.filter(
+    (value) => value && value.trim() !== ""
+  ).length;
+
+  const completion = Math.round(
+    (completed / fields.length) * 100
+  );
+
   return (
     <Paper
       elevation={0}
@@ -20,11 +56,13 @@ function ProfileCard() {
         borderRadius: "18px",
         p: 3.5,
         border: "1px solid #E5E7EB",
-        boxShadow: "0 8px 24px rgba(15,23,42,.05)",
+        boxShadow:
+          "0 8px 24px rgba(15,23,42,.05)",
         transition: ".3s",
 
         "&:hover": {
-          boxShadow: "0 16px 40px rgba(37,99,235,.12)",
+          boxShadow:
+            "0 16px 40px rgba(37,99,235,.12)",
           transform: "translateY(-4px)",
         },
       }}
@@ -34,7 +72,8 @@ function ProfileCard() {
         flexDirection="column"
         alignItems="center"
       >
-        {/* Avatar */}
+
+        {/* ================= AVATAR ================= */}
 
         <Box
           sx={{
@@ -52,8 +91,10 @@ function ProfileCard() {
                 "linear-gradient(135deg,#2563EB,#4F46E5)",
             }}
           >
-            S
+            {initials}
           </Avatar>
+
+          {/* Online indicator */}
 
           <Box
             sx={{
@@ -69,26 +110,33 @@ function ProfileCard() {
           />
         </Box>
 
-        {/* Name */}
+        {/* ================= NAME ================= */}
 
         <Typography
           fontWeight={700}
           fontSize={22}
+          textAlign="center"
         >
-          Sam
+          {name}
         </Typography>
+
+        {/* ================= ROLE ================= */}
 
         <Typography
           color="text.secondary"
           fontSize={15}
           mb={2}
         >
-          Student
+          {role === "STUDENT" ? "Student" : role}
         </Typography>
+
+        {/* ================= DEPARTMENT ================= */}
 
         <Chip
           icon={<SchoolRoundedIcon />}
-          label="Computer Science"
+          label={
+            department || "Department not set"
+          }
           sx={{
             mb: 3,
             bgcolor: "#EEF4FF",
@@ -98,7 +146,7 @@ function ProfileCard() {
           }}
         />
 
-        {/* Progress Header */}
+        {/* ================= PROFILE COMPLETION ================= */}
 
         <Box
           display="flex"
@@ -117,15 +165,13 @@ function ProfileCard() {
             fontWeight={700}
             color="#2563EB"
           >
-            72%
+            {completion}%
           </Typography>
         </Box>
 
-        {/* Progress */}
-
         <LinearProgress
           variant="determinate"
-          value={72}
+          value={completion}
           sx={{
             width: "100%",
             height: 9,
@@ -140,6 +186,8 @@ function ProfileCard() {
           }}
         />
 
+        {/* ================= STATUS ================= */}
+
         <Box
           mt={2}
           display="flex"
@@ -148,7 +196,10 @@ function ProfileCard() {
         >
           <CheckCircleRoundedIcon
             sx={{
-              color: "#10B981",
+              color:
+                completion === 100
+                  ? "#10B981"
+                  : "#2563EB",
               fontSize: 18,
             }}
           />
@@ -157,35 +208,37 @@ function ProfileCard() {
             fontSize={14}
             color="text.secondary"
           >
-            You're almost done!
+            {completion === 100
+              ? "Profile completed!"
+              : "Complete your profile information"}
           </Typography>
         </Box>
 
-        {/* Button */}
+        {/* ================= BUTTON ================= */}
 
         <Button
           fullWidth
           variant="contained"
+          onClick={() => navigate("/profile")}
           sx={{
             mt: 3,
-
             py: 1.3,
-
             borderRadius: "12px",
-
             fontWeight: 700,
-
             textTransform: "none",
-
             boxShadow: "none",
 
             "&:hover": {
-              boxShadow: "0 10px 25px rgba(37,99,235,.25)",
+              boxShadow:
+                "0 10px 25px rgba(37,99,235,.25)",
             },
           }}
         >
-          Complete Profile
+          {completion === 100
+            ? "View Profile"
+            : "Complete Profile"}
         </Button>
+
       </Box>
     </Paper>
   );

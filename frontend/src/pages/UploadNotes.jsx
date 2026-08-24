@@ -40,6 +40,11 @@ function UploadNotes() {
 
     e.preventDefault();
 
+    if (!file) {
+      toast.error("Please select a PDF file");
+      return;
+    }
+
     const data = new FormData();
 
     Object.keys(formData).forEach((key) => {

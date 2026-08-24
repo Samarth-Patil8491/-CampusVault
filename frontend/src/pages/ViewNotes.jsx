@@ -415,7 +415,7 @@ function ViewNotes() {
       fullWidth
       variant="contained"
       startIcon={<DownloadRoundedIcon />}
-      href={`http://localhost:8080/api/files/download/${note.fileName}`}
+      href={`/api/files/download/${note.fileName}`}
       sx={{
         borderRadius: "12px",
         py: 1.2,

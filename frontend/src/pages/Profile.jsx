@@ -10,36 +10,37 @@ import {
 } from "@mui/material";
 
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
-import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
+import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 
 function Profile() {
   const user = {
-    name: "Sam",
-    email: "sam@gmail.com",
-    department: "CSE",
-    semester: 5,
-    uploads: 12,
+    name: localStorage.getItem("fullName") || "Student",
+    email: localStorage.getItem("email") || "Not available",
+    department: localStorage.getItem("department") || "Not available",
+    semester: localStorage.getItem("semester") || "Not available",
+    role: localStorage.getItem("role") || "STUDENT",
   };
+
+  const initials = user.name
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
 
   return (
     <Layout>
-
-      <Typography
-        variant="h4"
-        fontWeight={700}
-        mb={4}
-      >
+      <Typography variant="h4" fontWeight={700} mb={4}>
         My Profile
       </Typography>
 
       <Grid container spacing={4}>
 
-        {/* ================= LEFT PROFILE CARD ================= */}
+        {/* PROFILE CARD */}
 
         <Grid item xs={12} md={4}>
-
           <Paper
             elevation={0}
             sx={{
@@ -52,50 +53,35 @@ function Profile() {
                 "0 18px 40px rgba(37,99,235,.18)",
             }}
           >
-
             <Box
               sx={{
                 p: 5,
                 textAlign: "center",
               }}
             >
-
               <Avatar
                 sx={{
                   width: 130,
                   height: 130,
                   mx: "auto",
                   mb: 3,
-
                   bgcolor: "#fff",
-
                   color: "#2563EB",
-
                   fontWeight: 700,
-
-                  fontSize: 52,
-
+                  fontSize: 42,
                   border:
                     "5px solid rgba(255,255,255,.25)",
                 }}
               >
-                {user.name.charAt(0)}
+                {initials}
               </Avatar>
 
-              <Typography
-                variant="h4"
-                fontWeight={700}
-              >
+              <Typography variant="h4" fontWeight={700}>
                 {user.name}
               </Typography>
 
-              <Typography
-                sx={{
-                  mt: 1,
-                  opacity: .9,
-                }}
-              >
-                Student
+              <Typography sx={{ mt: 1, opacity: 0.9 }}>
+                {user.role}
               </Typography>
 
               <Chip
@@ -107,123 +93,13 @@ function Profile() {
                   fontWeight: 700,
                 }}
               />
-
-              {/* ================= STATS ================= */}
-
-              <Grid
-                container
-                spacing={2}
-                mt={4}
-              >
-
-                <Grid item xs={4}>
-
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      py: 2.5,
-                      bgcolor:
-                        "rgba(255,255,255,.15)",
-                      backdropFilter:
-                        "blur(10px)",
-                      color: "#fff",
-                      borderRadius: 3,
-                    }}
-                  >
-
-                    <Typography
-                      variant="h4"
-                      fontWeight={700}
-                    >
-                      {user.uploads}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                    >
-                      Uploads
-                    </Typography>
-
-                  </Paper>
-
-                </Grid>
-
-                <Grid item xs={4}>
-
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      py: 2.5,
-                      bgcolor:
-                        "rgba(255,255,255,.15)",
-                      backdropFilter:
-                        "blur(10px)",
-                      color: "#fff",
-                      borderRadius: 3,
-                    }}
-                  >
-
-                    <Typography
-                      variant="h4"
-                      fontWeight={700}
-                    >
-                      {user.semester}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                    >
-                      Semester
-                    </Typography>
-
-                  </Paper>
-
-                </Grid>
-
-                <Grid item xs={4}>
-
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      py: 2.5,
-                      bgcolor:
-                        "rgba(255,255,255,.15)",
-                      backdropFilter:
-                        "blur(10px)",
-                      color: "#fff",
-                      borderRadius: 3,
-                    }}
-                  >
-
-                    <Typography
-                      variant="h6"
-                      fontWeight={700}
-                    >
-                      {user.department}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                    >
-                      Department
-                    </Typography>
-
-                  </Paper>
-
-                </Grid>
-
-              </Grid>
-
             </Box>
-
           </Paper>
-
         </Grid>
 
-        {/* ================= RIGHT ACCOUNT CARD STARTS HERE ================= */}
+        {/* ACCOUNT INFORMATION */}
 
         <Grid item xs={12} md={8}>
-
           <Paper
             elevation={0}
             sx={{
@@ -234,23 +110,24 @@ function Profile() {
                 "0 10px 30px rgba(15,23,42,.05)",
             }}
           >
-
             <Typography
               variant="h5"
               fontWeight={700}
-              mb={4}
+              mb={3}
             >
               Account Information
             </Typography>
-                        {/* Name */}
+
+            {/* NAME */}
 
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
                 justifyContent: "space-between",
+                alignItems: "center",
                 py: 2.5,
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom:
+                  "1px solid #E5E7EB",
               }}
             >
               <Box>
@@ -269,19 +146,10 @@ function Profile() {
                 </Typography>
               </Box>
 
-              <Avatar
-                sx={{
-                  bgcolor: "#EFF6FF",
-                  color: "#2563EB",
-                  width: 44,
-                  height: 44,
-                }}
-              >
-                {user.name.charAt(0)}
-              </Avatar>
+              <BadgeRoundedIcon color="primary" />
             </Box>
 
-            {/* Email */}
+            {/* EMAIL */}
 
             <Box
               sx={{
@@ -289,7 +157,8 @@ function Profile() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 py: 2.5,
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom:
+                  "1px solid #E5E7EB",
               }}
             >
               <Box>
@@ -308,14 +177,10 @@ function Profile() {
                 </Typography>
               </Box>
 
-              <EmailRoundedIcon
-                sx={{
-                  color: "#2563EB",
-                }}
-              />
+              <EmailRoundedIcon color="primary" />
             </Box>
 
-            {/* Department */}
+            {/* DEPARTMENT */}
 
             <Box
               sx={{
@@ -323,7 +188,8 @@ function Profile() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 py: 2.5,
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom:
+                  "1px solid #E5E7EB",
               }}
             >
               <Box>
@@ -342,14 +208,10 @@ function Profile() {
                 </Typography>
               </Box>
 
-              <ApartmentRoundedIcon
-                sx={{
-                  color: "#2563EB",
-                }}
-              />
+              <ApartmentRoundedIcon color="primary" />
             </Box>
 
-            {/* Semester */}
+            {/* SEMESTER */}
 
             <Box
               sx={{
@@ -357,7 +219,8 @@ function Profile() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 py: 2.5,
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom:
+                  "1px solid #E5E7EB",
               }}
             >
               <Box>
@@ -376,14 +239,10 @@ function Profile() {
                 </Typography>
               </Box>
 
-              <SchoolRoundedIcon
-                sx={{
-                  color: "#2563EB",
-                }}
-              />
+              <SchoolRoundedIcon color="primary" />
             </Box>
 
-            {/* Uploads */}
+            {/* ROLE */}
 
             <Box
               sx={{
@@ -398,30 +257,23 @@ function Profile() {
                   color="text.secondary"
                   fontSize={14}
                 >
-                  Total Uploads
+                  Account Type
                 </Typography>
 
                 <Typography
                   fontWeight={600}
                   mt={0.5}
                 >
-                  {user.uploads} Notes Uploaded
+                  {user.role}
                 </Typography>
               </Box>
 
-              <UploadFileRoundedIcon
-                sx={{
-                  color: "#2563EB",
-                }}
-              />
+              <BadgeRoundedIcon color="primary" />
             </Box>
 
           </Paper>
-
         </Grid>
-
       </Grid>
-
     </Layout>
   );
 }
