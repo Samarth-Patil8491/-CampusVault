@@ -497,59 +497,35 @@ The project was developed as a portfolio project to demonstrate practical Full S
 
 # Screenshots
 
-## 1. AWS EKS Cluster
+## 1. Overall Architecture / Application Flow
 
-![AWS EKS Cluster](screenshots/aws-eks-cluster.png)
+![Overall Flow](screenshots/overall%20flow.png)
 
-Shows the EKS cluster used to host the Kubernetes workloads.
-
----
-
-## 2. AWS VPC
-
-![AWS VPC](screenshots/aws-vpc.png)
-
-Shows the VPC/networking environment used by the AWS infrastructure.
+Shows the overall flow and architecture of the CampusVault application.
 
 ---
 
-## 3. AWS Application Load Balancer
+## 2. Kubernetes Architecture
 
-![AWS Load Balancer](screenshots/aws-load-balancer.png)
+![Kubernetes Architecture](screenshots/kuberenetesfinal.drawio.png)
 
-Shows the Application Load Balancer provisioned through the Kubernetes Ingress configuration.
-
----
-
-## 4. Amazon ECR
-
-![Amazon ECR](screenshots/aws-ecr.png)
-
-Shows the container repositories used for the CampusVault Docker images.
+Shows the Kubernetes architecture and deployment structure used for CampusVault.
 
 ---
 
-## 5. Kubernetes Pods
+## 3. Kubernetes Rolling Update
 
-![Kubernetes Pods](screenshots/kubernetes-pods.png)
+![Kubernetes Rolling Update](screenshots/rollingupdate.drawio.png)
 
-Shows the running frontend, backend, and PostgreSQL Kubernetes workloads.
-
----
-
-## 6. Kubernetes Services
-
-![Kubernetes Services](screenshots/kubernetes-services.png)
-
-Shows the Kubernetes networking services used by the application.
+Demonstrates the Kubernetes rolling update deployment strategy used to update application versions without directly stopping the running workload.
 
 ---
 
-## 7. Kubernetes Ingress
+## 4. Kubernetes Rollback
 
-![Kubernetes Ingress](screenshots/kubernetes-ingress.png)
+![Kubernetes Rollback](screenshots/Rollingback.drawio.png)
 
-Shows the Kubernetes Ingress responsible for routing external traffic through AWS infrastructure.
+Demonstrates Kubernetes rollback functionality for reverting a deployment to a previous stable version.
 
 ---
 
